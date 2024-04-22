@@ -64,16 +64,6 @@ def analyse(liste_textes, liste_questions, liste_reponses):
         for texte, question, reponse in zip(textes_analyses, questions_analysees, reponses_analysees):
             structure.writerow([texte, question, reponse])
              
-    for texte in liste_textes:
-        doc = nlp(texte)
-
-        with open("texte_analyse.txt", "a") as file:
-            file.write("TEXTE 1")
-            for token in doc:
-                forme = token.text
-                pos = token.pos
-                lemme = token.lemma
-                file.write(f"{forme}\t\t{pos}\t\t{lemme}\n")
 
 def main():
 
