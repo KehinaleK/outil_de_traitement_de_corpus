@@ -1,5 +1,5 @@
-from pathlib import Path
-import csv
+from pathlib import Path # Pour parcourir le dossier contenant les fichiers txt
+import csv # Permet de créer le fichier csv
 
 """
 Ce programme permet de récupérer l'ensemble des contenus des fichiers texte obtenus avec retrieval.py
@@ -17,22 +17,25 @@ def tableau(dossier):
     liste_textes = []
     liste_personnages = []
 
-    listes_fichiers = sorted(dossier.glob("*.txt"))
+    # Pour avoir les lignes par ordre alphabétique (parce que j'aime bien)
+    listes_fichiers = sorted(dossier.glob("*.txt")) 
     print(listes_fichiers)
 
     for fichier in listes_fichiers:
         texte = fichier.name
         index = texte.find("(")
         personnage = texte[:index].replace("%27","'")
+        # On remplace les caractères mal encodés (donc les ')
         liste_personnages.append(personnage)
 
     for fichier in listes_fichiers:
         with open(fichier, "r", encoding="utf8") as f:
             texte = f.read()
             liste_textes.append(texte.strip())
+            # On enlève les espaces chelous
     
-
-    with open("../data/train/donnees.csv", "w") as fichier:
+    # Création du fichier tabulaire ! 
+    with open("../data/clean/donnees.csv", "w") as fichier:
         structure = csv.writer(fichier, delimiter=',', quotechar='"', 
                                quoting=csv.QUOTE_MINIMAL)
         structure.writerow(["nom", "texte"])
@@ -40,7 +43,7 @@ def tableau(dossier):
             structure.writerow([nom, texte])
 
 
-tableau(dossier=Path("../urls"))
+tableau(dossier=Path("../data/raw"))
 
 
 

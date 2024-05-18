@@ -1,10 +1,10 @@
-from bs4 import BeautifulSoup
-import requests
+from bs4 import BeautifulSoup #Utiliser pour l'extraction des contenus textuels
+import requests #Utiliser pour l'extraction des contenus textuels
 
 """ 
 Ce programme permet d'effectuer un web-scrapping permettant de parcourir l'ensemble des pages individuelles
-de personnages de la section "Heroes" du site DC-Databse. Le lien de départ utilisé pour le scrapping est :
-https://dc.fandom.com/wiki/DC_Comics_Database'
+des personnages de la section "Heroes" du site DC-Databse. Le lien de départ utilisé pour le scrapping est :
+https://dc.fandom.com/wiki/DC_Comics_Database
 Ce programme permet d'extraire une courte description des personnages répondant à certaines conditions
 et de les stocker dans le dossier "urls" sous format de fichiers txt individuels. 
 """
@@ -65,6 +65,7 @@ def get_liens_page(content):
     for element in content.descendants:
         if element.name == "div":
             if 'category-page__member-left' in element.get("class", []):
+                # Permet d'uniquement obtenir les liens concernant des pages individuelles
                 lien = element.find("a")
                 if lien is not None:
                     lien_lien = lien.get("href")
@@ -79,22 +80,23 @@ def extraction_texte(liste_liens):
 
     Paramètre : 
     liste_liens (List[str]): liste de tous les liens menant à 
-    des pahes individuelles de personnages.
+    des pages individuelles de personnages.
 
     Return :
     compteur(int): nombre de liens parcourus.
     """
 
-    compteur = 0
+    compteur = 0 # Pour obtenir le nombre de pages total
     for lien in liste_liens:
         compteur += 1 
-        racine = lien[6:]
-        url = f"https://dc.fandom.com{lien}"
+        racine = lien[6:] # Obtenir le nom du perso et son univers
+        url = f"https://dc.fandom.com{lien}" 
         page = requests.get(url)
         page_content = BeautifulSoup(page.content, 'lxml')
 
         texte = page_content.find('div', class_='mw-parser-output')
 
+        # Pour enlever des éléments un pouvant parfois rendre la structure différente
         for table in texte.find_all('table', class_='navbox'):
             table.extract()
         for quote in texte.find_all('div', class_='quote'):
@@ -114,17 +116,17 @@ def extraction_texte(liste_liens):
                 description_texte = description.get_text()
 
             description_mot = description_texte.split(" ")
-            if len(description_mot) > 50:
+            if len(description_mot) > 50: # On obttient le nombre de caractères et si au dessus de 50 on garde ! 
                 print(f"Ajout : {racine}")
-                with open(f"../bin/{racine}.txt", "w", encoding="utf8") as fichier:
-                    fichier.write(description_texte)
+                with open(f"../data/raw/{racine}.txt", "w", encoding="utf8") as fichier: # création des fichiers
+                    fichier.write(description_texte) 
             else:
-                print(f"Trop court : {racine}")
+                print(f"Trop court : {racine}") # Pour tenir compte !
         else:
-            print(f"Pas de sommaire trouvé pour : {racine}")
+            print(f"Pas de sommaire trouvé pour : {racine}") # Pour tenir compte ! 
 
     return compteur
-        ## Je ne prends que les fichiers ayant un sommaire ou ayant une description supérieure (très environs) à 3 phrases.
+        ## Je ne prends que les fichiers ayant un sommaire ou ayant une description supérieure (très environs) à 4 phrases.
 
 def get_prochaine_page(content):
     """
