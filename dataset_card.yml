@@ -1,0 +1,137 @@
+---
+task_categories:
+- question-answering
+language:
+- en
+pretty_name: DC Comics Question Answering Corpus
+size_categories:
+- 10K<n<100K
+---
+
+# Dataset Card for Dataset Name
+
+This dataset is a corpus made out of 230 questions and answers related to the DC-Comics universe.
+
+## Dataset Details
+
+### Dataset Description
+
+This dataset is composed of three columns :
+
+- Context : a short description of a character (around 70 words).
+
+- Question : a question about this description (around 7 words).
+
+- Answer : an answer to the question asked (around 12 words).
+
+There are 14 additional columns used to characterize the types of questions and answers :
+
+- For questions : we classify them by interrogrative words (where, when, who, why, how, how many, what) and types or questions (yes/no, open questions). Open questions are questions that require an explanation and not just a short answer or a list of elements. For this reason, most "why" questions are considered as open questions, "who" questions are not and "what" questions can be both.
+- For answers : we classify them based on their lenght and contents. "complete" answers are answers that re-use the terms of the question and are detailed.
+  Examples :
+
+  How did Bart Allen die ?
+
+  Bart Allen was killed by Calculator while he was fighting a possessed Wally West.
+
+  How does Zatana cast spells ?
+
+  Zatanna casts spells by saying what she wants backwards.
+
+  When did Tim Drake become Red Robin ?
+
+  Tim Drake had to give up the identity of Robin and begin wearing the costume of Red Robin when he was replaced by Damian Wayne.
+
+  "partial" questions are questions that do not re-use one of the important term of the question (name or object/noun) and do not re-use the question to answer. These answers also include yes/no questions that do not deny the affirmation assumed in the question before adding correction.
+  Examples :
+
+  Were Garth, Ayla and Mekt able to use the local lighting beasts to recharge the batteries of their ship ?
+
+  No, they were attacked by the beasts which caused the siblings to gain electrical powers.
+
+  Is Superman mean ?
+
+  No, Superman is noble kind and gentle. La version complète aurait été "No, Superman is not mean. Superman is..."
+
+  What is Bigby Wolf renowned for in the Homelands ?
+
+  For terrorizing three small pigs and stalking a girl through the woods.
+
+  These catagories are mostly similar. The biggest distinction is between them and the last category of answers (based on lenght and content). "short" answers are answers composed of one, two or three words or a list of expected elements.
+  Examples :
+
+  Who are Jonathan Samuel Kent’s parents ?
+
+  Lois Lane and Superman
+
+  What is the name of Rhea Jones’ new form ?
+
+  Pupa.
+
+  Where Constance and Vivian D’Aramis hard to tell apart ?
+
+  Yes
+
+  Finally, some answers are characterized as "copy" since they re-use almost or completly the terms of the questions and others are annotated as "complement_info" when they give more informations then asked by the questions.
+  Examples :
+
+    Question "copy" :
+
+  Alec Holland is Swamp Thing, the champion of the Parliament of Trees. He has control of all plant life in the universe due to his link to a force that connects all plant life known as the Green. He has been a member of the Justice League as well as its mystic division the Justice League Dark.
+
+  Control of all plant life in the universe
+
+  Diana of Paradise Island is an Amazon princess who has come to be known as the heroine Wonder Woman in the world of men. As Diana Prince, then a yeoman first class in the United States Navy's Women Accepted for Voluntary Emergency Service, or WAVES, Corps, she was originally active in World War II with the Air Corps Intelligence Division. After the war, she returned to Paradise Island. In the 1970s, She rejoined the world of men and, as now-Commander Diana Prince, now of the regular United States Navy, joined the Inter-Agency Defense Command.
+
+  In the 1970s
+
+    Question "complement_info" :
+
+  Which famous tale is Frau Totenkinder from ?
+
+  Frau Totenkinder is the Black Forest Witch from the Hansel and Gretel story
+
+
+The dataset contains around 19 000 words among our three columns and is fully in english.
+Questions and answers' structures vary in lenght and forms.
+
+
+- **Curated by:** Kehina MANSERI
+- **Language(s) (NLP):** English
+
+
+## Uses
+
+
+This dataset can be used for the training of question/answering models.
+
+### Direct Use
+
+The diversity of questions and answers can help to train models that target more precise and concise answers as well as models that target more detailed and long answers.
+
+
+### Out-of-Scope Use
+
+This dataset uses questions with pretty formal structures (using mostly interrogative words : when, where, who, what, how, why, how many...). It would not be able to train models for more complex or abstract questions.
+
+## Dataset Structure
+
+
+## Dataset Creation
+
+### Source Data
+
+The source data originates from de DC-Databse website : https://dc.fandom.com/wiki/DC_Comics_Database
+The descriptions used as contexts are from the "Heroes" section of the website and only concern characters with descriptions with at least 50 words. Within the individual pages, those descriptions are located above the table of contents and under quotes or titles.
+
+#### Data Collection and Processing
+
+Those descriptions were extracted from each page with the help of Beautiful Soup.
+
+#### Who are the source data producers?
+
+The retrieved data was written by the community of DC-Database.
+
+### Annotations [optional]
+
+The questions and answers were added to the dataset manually by Kkarmin.
