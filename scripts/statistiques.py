@@ -1,21 +1,43 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import datastructures
-import argparse
-from wordcloud import WordCloud
-from scipy.stats import pearsonr
+import pandas as pd # Pour obtenir notre dataframe
+import matplotlib.pyplot as plt # Pour obtenir nos graphiques
+import datastructures # Pour remplir notre datastructure
+import argparse # Pour choisir le chiffre désiré
+from wordcloud import WordCloud # Pour créer nos nuages de mots
+from scipy.stats import pearsonr # Pour le calcul de la corrélation et de la p-value
 
+"""
+Ce programme permet d'obtenir une analyse statistique de nos données.
+Les graphiques et nuages obtenus sont stockés dans le dossier figures.
+Les chiffres sont eux affichés sur votre terminal mais également présents
+dans le journal avec leurs graphiques correspondants. 
+Les catégories utilisées sont également expliquées et illustrées dans le journal.
+"""
 
 def get_table():
 
-    
+    """
+    Cette fonction permet de récupérer notre dataframe.
+
+    Returns:
+    colonnes (Dataframe Pandas): Ensemble du tableau donnees_stats.csv.
+    """
+
     tableau = pd.read_csv("../data/stats/donnees_stats.csv")
     colonnes = tableau[["name", "context", "question", "answer", "where", "when", "who", "what", "how", "why", "how_many", "yes/no", 
                         "complete", "partial", "short", "complement_info", "copy", "open_question"]]
     return colonnes
 
 def get_heros(colonnes):
+    
+    """
+    Cette fonction permet de remplir notre datastructure.
 
+    Paramètres :
+    colonnes (Dataframe Pandas): Ensemble du tableau donnees_stats.csv.
+
+    Returns :
+    liste_heros (List[Object Hero]) : Liste d'objets de la classe Hero contenant l'ensemble des instances de cette dernière.
+    """
      
     lignes_necessaires = colonnes[0:231]
     liste_heros = []
@@ -49,6 +71,24 @@ def get_heros(colonnes):
     return liste_heros
 
 def types_questions(liste_heros):
+
+    """
+    Cette fonction permet d'obtenir les chiffres concernant les types de questions de notre corpus.
+
+    Paramètres : 
+    liste_heros (List[Object Hero]) : Liste d'objets de la classe Hero contenant l'ensemble des instances de cette dernière.
+
+    Returns : 
+    nbr_where (int): nombre de questions where.
+    nbr_when (int): nombre de questions when.
+    nbr_who (int): nombre de questions who.
+    nbr_what (int): nombre de questions what.
+    nbr_how (int): nombre de questions how.
+    nbr_why (int): nombre de questions why.
+    nbr_how_many (int): nombre de questions how_many.
+    nbr_yes_no (int): nombre de questions yes_no.
+    nbr_open (int): nombre de questions open.
+    """
 
     nbr_where = 0
     nbr_when = 0
@@ -86,6 +126,20 @@ def types_questions(liste_heros):
 
 def type_reponses(liste_heros):
 
+    """
+    Cette fonction permet d'obtenir les chiffres concernant les types de réponses de notre corpus.
+
+    Paramètres : 
+    liste_heros (List[Object Hero]) : Liste d'objets de la classe Hero contenant l'ensemble des instances de cette dernière.
+
+    Returns : 
+    nbr_complete (int): nombre de réponses complete.
+    nbr_partial (int): nombre de réponses partial.
+    nbr_short (int): nombre de réponses short.
+    nbr_complement_info (int): nombre de réponses complement_info.
+    nbr_copy (int): nombre de réponses copy.
+    """
+
     nbr_complete = 0
     nbr_partial = 0
     nbr_short = 0
@@ -109,6 +163,26 @@ def type_reponses(liste_heros):
 
 
 def tailles(liste_heros):
+
+    """
+    Cette fonction permet d'obtenir les chiffres concernant les tailles des éléments de notre corpus.
+
+    Paramètres : 
+    liste_heros (List[Object Hero]) : Liste d'objets de la classe Hero contenant l'ensemble des instances de cette dernière.
+
+    Returns : 
+    moyenne_contexte (float): moyenne de la taille de tous les contextes.
+    moyenne_question (float): moyenne de la taille de tous les questions.
+    moyenne_reponse (float): moyenne de la taille de tous les réponses.
+    ratio_question_reponse (float): ratio entre la taille des questions et des réponses.
+    ratio_reponse_question (float): ratio entre la taille des réponses et des questions. 
+    mots_contexte (List[str]): liste de tous les mots (avec répétition) des contextes.
+    mots_question (List[str]): liste de tous les mots (avec répétition) des questions.
+    mots_reponse  (List[str]): liste de tous les mots (avec répétition) des réponses.
+    taille_contextes (int): taille moyenne des contextes.
+    taille_questions (int): taille moyenne des questions.
+    tailles_reponses (int): taille moyenne des réponses.
+    """
 
     nbr_lignes = 0
     taille_contexte = 0
@@ -150,6 +224,16 @@ def tailles(liste_heros):
     return moyenne_contexte, moyenne_question, moyenne_reponse, ratio_question_reponse, ratio_reponse_question, mots_contexte, mots_question, mots_reponse, taille_contextes, taille_questions, tailles_reponses
 
 def plot_taille(moyenne_contexte, moyenne_question, moyenne_reponse):
+
+    """
+    Cette fonction permet d'obtenir un graphique représentant les tailles moyennes des 
+    contextes, réponses et questions (dans le dossier figures). 
+
+    Paramètres :
+    moyenne_contexte (float): moyenne de la taille de tous les contextes.
+    moyenne_question (float): moyenne de la taille de tous les questions.
+    moyenne_reponse (float): moyenne de la taille de tous les réponses.
+    """
      
     bar_width = 0.25
     indices = range(len([moyenne_contexte, moyenne_question, moyenne_reponse]))
@@ -168,6 +252,15 @@ def plot_taille(moyenne_contexte, moyenne_question, moyenne_reponse):
 
 
 def plot_frequence(colonne, titre):
+
+    """
+    Cette fonction permet d'obtenir un nuage des mots les plus fréquents d'une catégorie.
+
+    Paramètres :
+    colonne (List[str]) : liste des mots les plus fréquents des contextes, questions ou réponses.
+    titre (str) : titre du nuage.
+    """
+     
     wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(colonne))
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
@@ -177,6 +270,20 @@ def plot_frequence(colonne, titre):
 
 
 def plot_types_questions(nbr_where, nbr_when, nbr_who, nbr_what, nbr_how, nbr_why, nbr_how_many):
+    
+    """
+    Cette fonction permet d'obtenir un graphique représentant la répartition de nos questions
+    en fonction des mots interrogatifs utilisés (dans le dossier figures). 
+
+    Paramètres:
+    nbr_where (int): nombre de questions where.
+    nbr_when (int): nombre de questions when.
+    nbr_who (int): nombre de questions who.
+    nbr_what (int): nombre de questions what.
+    nbr_how (int): nombre de questions how.
+    nbr_why (int): nombre de questions why.
+    nbr_how_many (int): nombre de questions how_many.
+    """
     
     bar_width = 0.25
     indices = range(len([nbr_where, nbr_when, nbr_who, nbr_what, nbr_how, nbr_why, nbr_how_many]))
@@ -193,6 +300,15 @@ def plot_types_questions(nbr_where, nbr_when, nbr_who, nbr_what, nbr_how, nbr_wh
     plt.show()
 
 def plot_types_questions_yes_no(nbr_yes_no, nbr_open):
+
+    """
+    Cette fonction permet d'obtenir un graphique représentant la répartition de nos questions
+    en fonction des types yes_no et ouverte (dans le dossier figures). 
+
+    Paramètres:
+    nbr_yes_no (int): nombre de questions yes_no.
+    nbr_open (int): nombre de questions open.
+    """
     
     bar_width = 0.25
     indices = range(len([nbr_yes_no, nbr_open]))
@@ -210,6 +326,18 @@ def plot_types_questions_yes_no(nbr_yes_no, nbr_open):
 
 
 def plot_types_reponses(nbr_complete, nbr_partial, nbr_short, nbr_complement_info, nbr_copy):
+
+    """
+    Cette fonction permet d'obtenir un graphique représentant la répartition de nos réponses
+    en fonction de leurs types (dossier figures).
+    
+    Paramètres:
+    nbr_complete (int): nombre de réponses complete.
+    nbr_partial (int): nombre de réponses partial.
+    nbr_short (int): nombre de réponses short.
+    nbr_complement_info (int): nombre de réponses complement_info.
+    nbr_copy (int): nombre de réponses copy.
+    """
     
     bar_width = 0.25
     indices = range(len([nbr_complete, nbr_partial, nbr_short, nbr_complement_info, nbr_copy]))
@@ -234,6 +362,34 @@ def main():
 
     colonnes = get_table()
     liste_heros = get_heros(colonnes)
+    
+    """
+    La fonction main contient un gestionnaire d'argument permettant d'obtenir les chiffres et graphiques désirés.
+
+    `question_type` permet d'obtenir le nombre de questions par type (en fonction des mots interrogatifs).
+    
+    Exemple : ```python3 statistiques.py --type question_type```
+
+ - `question_type_yes_no` permet d'obtenir le nombre de questions par type (en fonction des questions yes/no ou ouvertes).
+    
+    Exemple : ```python3 statistiques.py --type question_type_yes_no```
+
+ - `reponse_type` permet d'obtenir le nombre de reponses par type.
+    
+    Exemple : ```python3 statistiques.py --type reponse_type```
+
+ - `taille` permet d'obtenir le nombre moyen de mots par colonne (contexte, question, réponse).
+    
+    Exemple : ```python3 statistiques.py --type taille```
+
+ - `fréquence` permet d'obtenir les mots les plus fréquents de chaque colonne (contexte, question, réponse).
+    
+    Exemple : ```python3 statistiques.py --type fréquence```
+
+- `corrélation` permet d'obtenir les correlation et p-values entre les longueurs des variables contextes/question, contextes/réponses et questions/réponses.
+
+    Exemple : ```python3 statistiques.py --type correlation```
+    """
 
     if args.type == "question_type":
         nbr_where, nbr_when, nbr_who, nbr_what, nbr_how, nbr_why, nbr_how_many, nbr_yes_no, nbr_open = types_questions(liste_heros)
@@ -273,9 +429,6 @@ def main():
         print(f"Coeff context-question = {corr_contexte_question}, p-value = {p_value_contexte_question}")
         print(f"Coeff context-reponse = {corr_contexte_reponse}, p-value = {p_value_contexte_reponse}")
         print(f"Coeff question-reponse = {corr_question_reponse}, p-value = {p_value_question_reponse}")
-
-
-
 
 if __name__ == "__main__":
     main()

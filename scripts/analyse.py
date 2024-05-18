@@ -1,11 +1,23 @@
-import pandas as pd
-import datasets
-from datasets import Dataset
-import spacy
-import csv
+import pandas as pd # Pour obtenir la dataframe de donnees.csv
+import datasets # Pour obtenir la dataset
+from datasets import Dataset # Pour obtenir la dataset
+import spacy # Pour analyser les textes
+import csv # Pour créer un fichier csv
+
+"""
+Ce programme permet d'analyser morpho-syntaxiquement les contextes, questions et réponses de notre corpus.
+Les trois colonnes sont analysées sont ensuite stockées dans une fichier donnees_analysees.csv.
+"""
 
 def extraction_donnees():
+    """
+    Cette fonction permet d'attribuer de créer des listes des contenus de chacune de nos colonnes.
 
+    Returns:
+    liste_textes(List(str)): liste des contextes.
+    liste_questions(List(str)): liste des questions.
+    liste_reponses(List(str)): liste des réponses.
+    """
     corpus_dataframe = pd.read_csv('../data/train/donnees.csv', header=0)
     dataset = Dataset.from_pandas(corpus_dataframe)
     
@@ -25,6 +37,17 @@ def extraction_donnees():
 
 
 def analyse(liste_textes, liste_questions, liste_reponses):
+    """
+    Cette fonction permet d'analyser chaque élément de nos listes contextes, questions et réponses.
+    Nous récupérons chaque forme, pos et lemme pour tous les éléments.
+    Ces analyses sont sauvegardées dans une fichier csv nommé donnees_analysees.csv
+
+    Paramètres :
+    liste_textes(List(str)): liste des contextes.
+    liste_questions(List(str)): liste des questions.
+    liste_reponses(List(str)): liste des réponses.
+
+    """
 
     nlp = spacy.load("en_core_web_sm")
 
@@ -61,7 +84,7 @@ def analyse(liste_textes, liste_questions, liste_reponses):
             reponse_analyse.append((forme,pos,lemme))
         reponses_analysees.append(reponse_analyse)
 
-    #print(textes_analyses)
+    # Création du fichier
     with open("../data/stats/donnees_analysees.csv", "w") as fichier:
         structure = csv.writer(fichier, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         structure.writerow(["texte_analyse", "question_analyse", "reponse_analyse"])

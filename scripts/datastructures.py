@@ -1,4 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass # Pour utiliser les dataclasses
+
+"""
+Le classe Hero contient l'ensemble des instances utilisées pour décrire
+nos liges et les types de questions/réponses. Cette classe est utilisée 
+pour l'analyse statistique de nos données dans le script statistiques.py. 
+"""
 
 @dataclass
 class Hero: 
