@@ -6,7 +6,6 @@
 3. [Fonctionnement des scripts](#script)
 4. [Statistiques](#statistiques)
 
-
 ## 1 - Introduction <a name="introduction"></a>
 
 Dans le cadre du cours, j'ai décidé de m'intéresser à une tâche question/réponse ou question answering. Le corpus construit se base sur des courtes descriptions de personnages de l'univers de bandes dessinées américaines DC Comics issues du site communautaire [DC Database](https://dc.fandom.com/wiki/DC_Comics_Database). J'ai décidé de rassembler l'ensemble du travail effectué lors des dernières semaines dans ce document.
