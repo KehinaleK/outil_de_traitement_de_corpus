@@ -42,6 +42,7 @@ Le dossier `scripts` contient l'ensemble des scripts utilisés pour l'analyse mo
 
 Le dossier `src` contient l'ensemble des scripts utilisés pour l'extraction et l'obtention du corpus. `retrieval.py` contient la logique de scrapping. `creation_tableau.py` permet d'obtenir le fichier d'entrainement tabulaire et `split.py` divise le corpus pour l'entraînement. 
 
+
 ## README
 
 Veillez à avoir une version de python compatible avec les différentes librairies utilisées. 
